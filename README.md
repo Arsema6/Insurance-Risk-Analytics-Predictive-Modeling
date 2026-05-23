@@ -19,7 +19,7 @@ The analysis uses the `MachineLearningRating_v3.txt` dataset containing:
 - Customer demographics (Gender, Age)
 - Temporal data spanning 18 months
 
-## Key Analyses
+## Key Analysis
 
 ### Data Summarization
 - Descriptive statistics for numerical features
