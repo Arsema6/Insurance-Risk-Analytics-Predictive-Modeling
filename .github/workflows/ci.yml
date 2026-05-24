@@ -1,0 +1,85 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches: [ main, task-*, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    name: Linting
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pylint black isort
+    
+    - name: Run flake8
+      run: flake8 src/ tests/ --count --select=E9,F63,F7,F82 --show-source --statistics
+    
+    - name: Run black check
+      run: black --check src/ tests/ --line-length=100 || true
+    
+    - name: Run isort check
+      run: isort --check-only src/ tests/ || true
+    
+    - name: Run pylint
+      run: pylint src/ --disable=C0111,W0212 || true
+
+  test:
+    runs-on: ubuntu-latest
+    name: Testing
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Run tests with pytest
+      run: pytest tests/ -v --cov=src --cov-report=xml --cov-report=html
+    
+    - name: Upload coverage reports
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        fail_ci_if_error: false
+
+  build:
+    runs-on: ubuntu-latest
+    name: Build Check
+    needs: [lint, test]
+    
+    steps:
+    - uses: actions/checkout@v3
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+    
+    - name: Verify package imports
+      run: python -c "import src.data_loader; import src.eda_utils; import src.visualization; import src.analysis; print('All modules imported successfully')"

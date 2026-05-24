@@ -17,9 +17,9 @@ The analysis uses the `MachineLearningRating_v3.txt` dataset containing:
 - Vehicle information (Make, Model, Type)
 - Geographic data (Province, ZipCode)
 - Customer demographics (Gender, Age)
-- Temporal data spanning 18 months
+- Temporal data spanning an 18-month period
 
-## Key Analysis
+## Key Analyses
 
 ### Data Summarization
 - Descriptive statistics for numerical features
@@ -130,11 +130,19 @@ The EDA notebook addresses:
 - pytest: Testing framework
 - flake8: Code linting
 
-See `requirements.txt` for a complete list with versions.
+See `requirements.txt` for complete list with versions.
 
 ## Contributing
 
-1. Create a new branch for your work: `git checkout -b feature/your-feature.`
+1. Create a new branch for your work: `git checkout -b feature/your-feature`
 2. Make your changes and commit with descriptive messages
-3. Push to your branch: `git push origin feature/your-feature.`
+3. Push to your branch: `git push origin feature/your-feature`
 4. Open a Pull Request
+
+## License
+
+This project is for analytical and educational purposes.
+
+## Author
+
+Insurance Risk Analytics Team
