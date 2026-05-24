@@ -1,0 +1,4 @@
+[core]
+    remote = localstorage
+['remote "localstorage"']
+    url = C:\Users\usb\Documents\dvc_storage_v2

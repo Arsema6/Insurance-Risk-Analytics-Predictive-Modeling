@@ -132,6 +132,88 @@ The EDA notebook addresses:
 
 See `requirements.txt` for complete list with versions.
 
+## Data Version Control (DVC)
+
+This project implements Data Version Control (DVC) for reproducible and auditable data pipeline management, a critical practice in regulated industries.
+
+### DVC Setup
+
+DVC has been initialized and configured with a local remote storage for version tracking of all data files. This enables:
+- **Reproducibility**: Exact data versions for any analysis at any time
+- **Auditability**: Complete history of data transformations
+- **Regulatory Compliance**: Full audit trail for regulatory requirements
+
+### Data Versions
+
+The project tracks multiple versions of the dataset:
+
+1. **Raw Data Version**: `data/MachineLearningRating_v3.txt` - Original insurance data
+2. **Cleaned Data Version**: `data/MachineLearningRating_cleaned_v1.txt` - Deduplicated and cleaned version
+
+### DVC Configuration
+
+- **Remote Storage**: Local directory at `C:\Users\usb\Documents\dvc_storage_v2`
+- **Remote Name**: `localstorage` (default remote)
+- **Storage Format**: Content-addressable storage (files organized by MD5 hash)
+
+### Reproducing the Data Pipeline
+
+To reproduce the data pipeline and retrieve specific versions:
+
+```bash
+# Initialize DVC (if not already done)
+dvc init
+
+# Add the default remote (already configured)
+dvc remote add -d localstorage /path/to/dvc_storage
+
+# Pull data from remote storage
+dvc pull
+
+# View DVC status
+dvc status
+
+# Check data file tracking
+dvc dag
+
+# Create a new version of data
+python src/data_versioning.py
+
+# Track new data version
+dvc add data/new_data_version.txt
+
+# Push data to remote
+dvc push
+
+# Commit metadata to git
+git add data/new_data_version.txt.dvc
+git commit -m "Add new data version"
+```
+
+### Data Versioning Workflow
+
+1. **Create Data Version**: Generate or modify data using `src/data_versioning.py`
+2. **Track with DVC**: Use `dvc add` to track the data file
+3. **Push to Remote**: Store actual data in remote storage using `dvc push`
+4. **Commit Metadata**: Track `.dvc` files in Git for versioning metadata
+
+### Accessing Data From Remote
+
+To retrieve data from remote storage:
+
+```bash
+# Pull all tracked data
+dvc pull
+
+# Pull specific file
+dvc pull data/MachineLearningRating_v3.txt.dvc
+
+# Check what's been modified
+dvc status
+```
+
+This approach ensures that large data files (>100MB) can be tracked without bloating the Git repository, while maintaining complete auditability and reproducibility for regulatory compliance.
+
 ## Contributing
 
 1. Create a new branch for your work: `git checkout -b feature/your-feature`
